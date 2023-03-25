@@ -33,7 +33,7 @@ void menu_inserir()
 	fclose(arvore);
 }
 
-void menu_alterar()
+void menu_alterar_preco()
 {
 	FILE *arvore, *lista;
 	lista = abre_arquivo_binario("lista");
@@ -45,6 +45,28 @@ void menu_alterar()
 	if (checa_se_codigo_ja_esta_na_arvore(arvore, cod))
 	{
 		altera_preco(arvore, lista, cod);
+		printf("N�mero de exemplares atualizado com sucesso.\n");
+	}
+	else
+	{
+		printf("O codigo escolhido nao esta na arvore.\n");
+	}
+	fclose(lista);
+	fclose(arvore);
+}
+
+void menu_alterar_estoque()
+{
+	FILE *arvore, *lista;
+	lista = abre_arquivo_binario("lista");
+	arvore = abre_arquivo_binario("arvore");
+	int cod;
+	printf("Entre com o codigo do livro que sofrera a alteracao.\n");
+	scanf("%d", &cod);
+	fflush(stdin);
+	if (checa_se_codigo_ja_esta_na_arvore(arvore, cod))
+	{
+		altera_estoque(arvore, lista, cod);
 		printf("N�mero de exemplares atualizado com sucesso.\n");
 	}
 	else
@@ -160,4 +182,43 @@ void menu_ler_arquivo(){
 			imprime_header_lista(h_l);
 	fclose(lista);
 	fclose(arvore);
+}
+
+int menuInicial(){
+	int resposta;
+	
+
+	printf("|   (1) Carregar arquivo\n");                           	
+	printf("|   (2) Inserir item\n");                   
+	printf("|   (3) Atualizar preço\n");
+	printf("|   (4) Atualizar estoque\n");
+	printf("|   (5) Remover produto\n");                   
+	printf("|   (6) Buscar dados do produto \n");            
+	printf("|   (7) Imprimir arvore binaria por nivel\n");    
+	printf("|   (8) Imprimir tudo\n");    
+	printf("|   (9) (Experimental)Abrir Arquivo\n");    
+
+	scanf("%d%*c", &resposta);
+	return resposta;
+}
+
+int sairPrograma(){
+	int opcao;
+	
+	system ("cls");
+	printf("\x1B[1;31m");
+	printf("=====================================\n");		
+	printf("|                                   |\n");
+	printf("|            Site                   |\n");	
+	printf("|                                   |\n");
+	printf("=====================================\n");	
+	printf("|                                   |\n");
+	printf("|      Deseja sair do programa?     |\n");
+	printf("|         (1) SIM   (2)NAO          |\n");
+	printf("|                                   |\n");
+	printf("=====================================\n");
+	printf("\x1B[0;0m");
+	scanf("%d", &opcao);
+	
+	return opcao;
 }

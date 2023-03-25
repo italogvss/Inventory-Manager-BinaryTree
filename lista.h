@@ -10,9 +10,11 @@ struct header_lista{
 
 struct item{
 	int codigo;
-	char nome[100];
-	char marca[100];
-	int preco;	
+	char nome[50];
+	char marca[30];
+	char categoria[50];
+	int estoque;
+	double preco;	
 }typedef Produto;
 
 //Aloca memoria para um livro
@@ -104,7 +106,7 @@ int inserir_dados_do_produto_no_arquivo(FILE *f, Produto *l);
 //Retorno: Produto com os dados preenchidos
 //Pre-condicao: Nenhuma
 //Pos-condicao: Linha lida e seus dados armazenados em um livro
-Produto *ler_linha_txt(FILE *f);
+void ler_linha_txt(FILE *f, FILE *arvore, FILE *lista);
 
 //Le os dados de um arquivo txt e insere-os nos arquivos contendo a arvore e a lista com as informacoes dos livros
 //Entrada: Nome do arquivo txt que sera lido, o arquivo contendo a arvore e o arquivo contendo a lista com as informacoes dos livros
@@ -134,12 +136,6 @@ void preenche_vetor(FILE *arvore, FILE *lista, Produto vet[], int raiz);
 //Pos-condicao: Vetor ordenado alfabeticamente
 void quick_sort(Produto vet[], int inicio, int fim);
 
-//printa o menu inicial
-//entrada = nenhuma
-//retorno = op��o do menu escolhida pelo usuario
-//Pr�-condi��o = nenhum
-//p�s-condi��o = nenhum
-int menuInicial();
 
 //printa o menu de sa�da do programa
 //entrada = nenhuma

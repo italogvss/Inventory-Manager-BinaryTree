@@ -798,12 +798,27 @@ void altera_preco(FILE *arvore, FILE *lista, int codigo)
 	No_Arvore *no = ler_dado_na_arvore(arvore, i);
 	Produto *p = ler_produto_na_lista(lista, no->pos_dados);
 	printf("Entre com o preço.\n");
-	scanf("%d", &p->preco);
+	scanf("%lf", &p->preco);
 	escreve_produto_na_lista(lista, p, no->pos_dados);
 	free(h);
 	free(no);
 	free(p);
 }
+
+void altera_estoque(FILE *arvore, FILE *lista, int codigo)
+{
+	Header_Arvore *h = ler_header_arvore(arvore);
+	int i = retorna_posicao_no_arquivo(arvore, codigo, h->raiz);
+	No_Arvore *no = ler_dado_na_arvore(arvore, i);
+	Produto *p = ler_produto_na_lista(lista, no->pos_dados);
+	printf("Entre com o estoque.\n");
+	scanf("%d", &p->estoque);
+	escreve_produto_na_lista(lista, p, no->pos_dados);
+	free(h);
+	free(no);
+	free(p);
+}
+
 
 // Busca e imprime os dados de um item presente na arvore a partir de seu codigo
 // Entrada: O arquivo que contem a arvore, o arquivo que contem a lista com as informacoes dos livros e o codigo do item cujas informacoes serao procuradas
