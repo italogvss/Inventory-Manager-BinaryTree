@@ -21,7 +21,7 @@ Produto *aloca_produto()
 Produto *ler_dados_produto()
 {
 	Produto *p = aloca_produto();
-	printf("Entre com os dados do item.\n");
+	printf("Entre com os dados do produto:\n");
 	printf("Codigo: ");
 	scanf("%d", &p->codigo);
 	fflush(stdin);
@@ -34,27 +34,12 @@ Produto *ler_dados_produto()
 	printf("Estoque: ");
 	scanf("%d", &p->estoque);
 	fflush(stdin);
-	printf("Preço: ");
+	printf("Preco: ");
 	scanf("%lf", &p->preco);
-	printf("Teste Preço: %lf", p->preco);
 	return p;
 }
 
-// Imprime o item
-// Entrada: Produto que sera impresso
-// Retorno: Nenhum
-// Pre-condicao: Produto nao nulo
-// Pos-condicao: Produto impresso
-void imprime_produto(Produto *p)
-{
-	printf("\n==========================================================\n");
-	printf("Codigo: %d\n", p->codigo);
-	printf("Nome: %s\n", p->nome);
-	printf("Marca: %s\n", p->marca);
-	printf("Categoria: %s\n", p->categoria);
-	printf("Estoque: %d\n", p->estoque);
-	printf("Preço R$: %.2f\n", p->preco);
-}
+
 
 // Aloca memoria para um header de lista
 // Entrada: Nenhuma
@@ -328,7 +313,7 @@ void lerlinha(FILE *f, FILE *arvore, FILE *lista)
 		else
 		{
 			// operação desconhecida
-			printf("Operação desconhecida: %s\n", token);
+			printf("Operacao desconhecida: %s\n", token);
 		}
 	}
 }

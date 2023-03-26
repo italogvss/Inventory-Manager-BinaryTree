@@ -7,40 +7,54 @@ void init()
 
 	FILE *arvore, *lista;
 	Header_Arvore *h_a = alocar_header_arvore();
-	Header_Lista *h_l = alocar_header_lista();
-	lista = abre_arquivo_binario("lista");
 	arvore = abre_arquivo_binario("arvore");
-
 	h_a->raiz = NULL_ARQ;
 	h_a->livre = NULL_ARQ;
 	h_a->topo = 0;
 	escreve_header_arvore(arvore, h_a);
 
+	Header_Lista *h_l = alocar_header_lista();
+	lista = abre_arquivo_binario("lista");	
 	h_l->livre = NULL_ARQ;
 	h_l->topo = 0;
 	escreve_header_lista(lista, h_l);
-	h_a = ler_header_arvore(arvore);
-	h_l = ler_header_lista(lista);
-	imprime_header_arvore(h_a);
-	imprime_header_lista(h_l);
+	fclose(arvore);
+	fclose(lista);
 }
+
+// Imprime o item
+// Entrada: Produto que sera impresso
+// Retorno: Nenhum
+// Pre-condicao: Produto nao nulo
+// Pos-condicao: Produto impresso
+void imprime_produto(Produto *p)
+{
+	printf("\n========== cod: %d ==============\n", p->codigo);
+	printf("Nome: %s | Marca: %s\n", p->nome, p->marca);
+	printf("Categoria: %s\n", p->categoria);
+	printf("Estoque: %d | Preco R$: %.2f\n", p->estoque, p->preco);
+}
+
+
 void menu_inserir()
 {
 	FILE *arvore, *lista;
 	lista = abre_arquivo_binario("lista");
 	arvore = abre_arquivo_binario("arvore");
-	Header_Arvore *h_a = ler_header_arvore(arvore);
-	Header_Lista *h_l = ler_header_lista(lista);
-	imprime_header_arvore(h_a);
-	imprime_header_lista(h_l);
 
+	Header_Arvore *h_a = alocar_header_arvore();
+	h_a = ler_header_arvore(arvore);
+	Header_Lista *h_l = alocar_header_lista();
+	h_l = ler_header_lista(lista);
+	imprime_header_arvore(h_a);
+	imprime_header_arvore(h_l);
 	Produto *pro;
 	int pos;
 	No_Arvore *no = aloca_no_arvore();
 	pro = ler_dados_produto();
 	if (checa_se_codigo_ja_esta_na_arvore(arvore, pro->codigo))
 	{
-		printf("O livro ja esta cadastrado.\n");
+		printf("O produto ja esta cadastrado.\n");
 	}
 	else
 	{
@@ -48,7 +62,7 @@ void menu_inserir()
 		no->codigo = pro->codigo;
 		no->pos_dados = pos;
 		inserir_no_arquivo_arvore(arvore, no);
-		printf("Livro inserido.\n");
+		printf("Produto inserido.\n");
 	}
 	fclose(lista);
 	fclose(arvore);
@@ -60,13 +74,13 @@ void menu_alterar_preco()
 	lista = abre_arquivo_binario("lista");
 	arvore = abre_arquivo_binario("arvore");
 	int cod;
-	printf("Entre com o codigo do livro que sofrera a alteracao.\n");
+	printf("Digite o codigo do produto:\n");
 	scanf("%d", &cod);
 	fflush(stdin);
 	if (checa_se_codigo_ja_esta_na_arvore(arvore, cod))
 	{
 		altera_preco(arvore, lista, cod);
-		printf("N�mero de exemplares atualizado com sucesso.\n");
+		printf("Preco atualizado!\n");
 	}
 	else
 	{
@@ -82,13 +96,13 @@ void menu_alterar_estoque()
 	lista = abre_arquivo_binario("lista");
 	arvore = abre_arquivo_binario("arvore");
 	int cod;
-	printf("Entre com o codigo do livro que sofrera a alteracao.\n");
+	printf("Digite o codigo do produto:\n");
 	scanf("%d", &cod);
 	fflush(stdin);
 	if (checa_se_codigo_ja_esta_na_arvore(arvore, cod))
 	{
 		altera_estoque(arvore, lista, cod);
-		printf("N�mero de exemplares atualizado com sucesso.\n");
+		printf("Estoque atualizado!\n");
 	}
 	else
 	{
@@ -104,13 +118,13 @@ void menu_remover()
 	lista = abre_arquivo_binario("lista");
 	arvore = abre_arquivo_binario("arvore");
 	int cod;
-	printf("Entre com o codigo do livro que deseja remover.\n");
+	printf("Digite o codigo do produto:\n");
 	scanf("%d", &cod);
 	fflush(stdin);
 	if (checa_se_codigo_ja_esta_na_arvore(arvore, cod))
 	{
 		remove_no_arquivo_arvore(arvore, lista, cod);
-		printf("Livro removido.\n");
+		printf("Produto removido.\n");
 	}
 	else
 	{
@@ -126,7 +140,7 @@ void menu_buscar()
 	lista = abre_arquivo_binario("lista");
 	arvore = abre_arquivo_binario("arvore");
 	int cod;
-	printf("Entre com o codigo do livro que deseja buscar.\n");
+	printf("Digite o codigo do produto:\n");
 	scanf("%d", &cod);
 	fflush(stdin);
 	if (checa_se_codigo_ja_esta_na_arvore(arvore, cod))
@@ -179,13 +193,13 @@ void menu_ler_arquivo()
 	fclose(lista);
 	arvore = fopen("arvore", "w");
 	lista = fopen("arvore", "w");
-	*/
+	
 	h_l->livre = NULL_ARQ;
 	h_l->topo = 0;
 	h_a->raiz = NULL_ARQ;
 	h_a->livre = NULL_ARQ;
 	h_a->topo = 0;
-	/*
+	
 	arvore = abre_arquivo_binario("arvore");
 	lista = abre_arquivo_binario("lista");
 	*/
@@ -193,55 +207,32 @@ void menu_ler_arquivo()
 	escreve_header_lista(lista, h_l);
 
 	fflush(stdin);
-	printf("Entre com o nome do arquivo txt com os dados que deseja inserir.\n");
+
+	printf("Digite o nome do arquivo.\n");
 	scanf("%[^\n]%*c", nome_arq);
+	if (strstr(nome_arq, ".txt") == NULL) {
+        strcat(nome_arq, ".txt");
+    }
 	ler_dados_do_arquivo_txt(nome_arq, arvore, lista);
-	printf("Arquivo carregado.\n");
-	printf("final leitura");
-	h_a = ler_header_arvore(arvore);
-	h_l = ler_header_lista(lista);
-	imprime_header_arvore(h_a);
-	imprime_header_lista(h_l);
+	printf("\nArquivo carregado.\n");
 	fclose(lista);
 	fclose(arvore);
 }
 
-int menuInicial()
+int menu()
 {
 	int resposta;
-
-	printf("|   (1) Carregar arquivo\n");
-	printf("|   (2) Inserir item\n");
-	printf("|   (3) Atualizar preço\n");
-	printf("|   (4) Atualizar estoque\n");
-	printf("|   (5) Remover produto\n");
-	printf("|   (6) Buscar dados do produto \n");
-	printf("|   (7) Imprimir arvore binaria por nivel\n");
-	printf("|   (8) Imprimir tudo\n");
-	printf("|   (9) (Experimental)Abrir Arquivo\n");
+	printf("|  1 -> Carregar arquivo txt\n");
+	printf("|  2 -> Inserir produto\n");
+	printf("|  3 -> Atualizar preço\n");
+	printf("|  4 -> Atualizar estoque\n");
+	printf("|  5 -> Remover produto\n");
+	printf("|  6 -> Buscar dados do produto \n");
+	printf("|  7 -> Imprimir arvore binaria por nivel\n");
+	printf("|  8 -> Imprimir tudo\n");
+	printf("|  9 -> Imprimir Livres (Corrigir)\n");
+	printf("|  0 -> Sair\n");
 
 	scanf("%d%*c", &resposta);
 	return resposta;
-}
-
-int sairPrograma()
-{
-	int opcao;
-
-	system("cls");
-	printf("\x1B[1;31m");
-	printf("=====================================\n");
-	printf("|                                   |\n");
-	printf("|            Site                   |\n");
-	printf("|                                   |\n");
-	printf("=====================================\n");
-	printf("|                                   |\n");
-	printf("|      Deseja sair do programa?     |\n");
-	printf("|         (1) SIM   (2)NAO          |\n");
-	printf("|                                   |\n");
-	printf("=====================================\n");
-	printf("\x1B[0;0m");
-	scanf("%d", &opcao);
-
-	return opcao;
 }

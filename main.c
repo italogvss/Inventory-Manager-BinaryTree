@@ -10,10 +10,10 @@ int main()
 	while (1)
 	{
 
-		int i = menuInicial();
+		int op = menu();
 		fflush(stdin);
 
-		switch (i)
+		switch (op)
 		{
 		case 1:
 			menu_ler_arquivo();
@@ -38,18 +38,18 @@ int main()
 		case 5:
 			system("cls");
 
-			menu_remover(arvore, lista);
+			menu_remover();
 			break;
 
 		case 6:
 
 			system("cls");
-			menu_buscar(arvore, lista);
+			menu_buscar();
 			break;
 
 		case 7:
 			system("cls");
-			imprime_por_nivel(arvore);
+			imprime_por_nivel();
 			break;
 
 		case 8:
@@ -62,22 +62,13 @@ int main()
 			break;
 
 		case 0:
-			system("cls");
-			int sair = sairPrograma();
-			if (sair == 1)
-				exit(1);
-			else if (sair == 2)
-			{
-			}
-			else
-			{
-				printf("Opção invalida.\n");
-			}
+			system("cls");		
+				exit(1);			
 			break;
 
 		default:
 			system("cls");
-			printf("Opção Invalida.\n");
+			printf("Opcao Invalida.\n");
 		}
 	}
 	return 0;

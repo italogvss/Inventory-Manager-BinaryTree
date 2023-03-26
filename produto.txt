@@ -14,4 +14,4 @@ R;50
 A;100;72;
 I;120;Celular;Apple;eletronicos e tecnologia;25;3200,00
 I;90;Suco de laraja;Del Valle; bebidas; 200;9,90
-R;200
+R;90

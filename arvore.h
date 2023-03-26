@@ -154,7 +154,7 @@ void imprime_nivel(FILE *f, int n, int raiz);
 //Retorno: Nenhum
 //Pre-condicao: Nenhuma
 //Pos-condicao: Arvore impressa
-void imprime_por_nivel(FILE *f);
+void imprime_por_nivel();
 
 //Retorna a posicao de um no arvore no arquivo que contem a arvore a partir de seu codigo
 //Entrada: O arquivo que contem a arvore, o codigo do elemento desejado e a raiz da arvore

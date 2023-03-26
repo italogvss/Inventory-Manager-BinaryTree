@@ -409,10 +409,12 @@ void imprime_nivel(FILE *f, int n, int raiz)
 // Retorno: Nenhum
 // Pre-condicao: Nenhuma
 // Pos-condicao: Arvore impressa
-void imprime_por_nivel(FILE *f)
+void imprime_por_nivel()
 {
-	Header_Arvore *h = ler_header_arvore(f);
-	int n = calcula_altura_arvore(f, h->raiz);
+	FILE *arvore;
+	arvore = abre_arquivo_binario("arvore");
+	Header_Arvore *h = ler_header_arvore(arvore);	
+	int n = calcula_altura_arvore(arvore, h->raiz);
 	int i;
 	if (h->raiz == NULL_ARQ)
 	{
@@ -421,10 +423,11 @@ void imprime_por_nivel(FILE *f)
 	}
 	for (i = 0; i < n; i++)
 	{
-		imprime_nivel(f, i, h->raiz);
+		imprime_nivel(arvore, i, h->raiz);
 		printf("\n");
 	}
 	free(h);
+	fclose(arvore);
 }
 
 // Retorna a posicao de um no arvore no arquivo que contem a arvore a partir de seu codigo
