@@ -6,27 +6,25 @@ void init()
 {
 
 	FILE *arvore, *lista;
-	Header_Arvore *h_a = alocar_header_arvore();
+	Header_A *h_a = alocar_header_arvore();
 	arvore = abre_arquivo_binario("arvore");
+	
 	h_a->raiz = NULL_ARQ;
 	h_a->livre = NULL_ARQ;
 	h_a->topo = 0;
 	escreve_header_arvore(arvore, h_a);
 
-	Header_Lista *h_l = alocar_header_lista();
+	Header_L *h_l = alocar_header_lista();
 	lista = abre_arquivo_binario("lista");	
+	
 	h_l->livre = NULL_ARQ;
 	h_l->topo = 0;
 	escreve_header_lista(lista, h_l);
+	
 	fclose(arvore);
 	fclose(lista);
 }
 
-// Imprime o item
-// Entrada: Produto que sera impresso
-// Retorno: Nenhum
-// Pre-condicao: Produto nao nulo
-// Pos-condicao: Produto impresso
 void imprime_produto(Produto *p)
 {
 	printf("\n========== cod: %d ==============\n", p->codigo);
@@ -41,16 +39,9 @@ void menu_inserir()
 	FILE *arvore, *lista;
 	lista = abre_arquivo_binario("lista");
 	arvore = abre_arquivo_binario("arvore");
-
-	Header_Arvore *h_a = alocar_header_arvore();
-	h_a = ler_header_arvore(arvore);
-	Header_Lista *h_l = alocar_header_lista();
-	h_l = ler_header_lista(lista);
-	imprime_header_arvore(h_a);
-	imprime_header_arvore(h_l);
 	Produto *pro;
 	int pos;
-	No_Arvore *no = aloca_no_arvore();
+	No_A *no = aloca_no_arvore();
 	pro = ler_dados_produto();
 	if (checa_se_codigo_ja_esta_na_arvore(arvore, pro->codigo))
 	{
@@ -160,10 +151,8 @@ void menu_imprimir()
 	FILE *arvore, *lista;
 	lista = abre_arquivo_binario("lista");
 	arvore = abre_arquivo_binario("arvore");
-	Header_Arvore *h_a = ler_header_arvore(arvore);
-	Header_Lista *h_l = ler_header_lista(lista);
-	imprime_header_arvore(h_a);
-	imprime_header_lista(h_l);
+	Header_A *h_a = alocar_header_arvore();
+	h_a = ler_header_arvore(arvore);
 	if (h_a->raiz != NULL_ARQ)
 	{
 		imprime_todos_produto(arvore, lista, h_a->raiz);
@@ -181,28 +170,9 @@ void menu_ler_arquivo()
 	FILE *arvore, *lista;
 	lista = abre_arquivo_binario("lista");
 	arvore = abre_arquivo_binario("arvore");
-	Header_Arvore *h_a = ler_header_arvore(arvore);
-	Header_Lista *h_l = ler_header_lista(lista);
+	Header_A *h_a = ler_header_arvore(arvore);
+	Header_L *h_l = ler_header_lista(lista);
 	char nome_arq[100];
-	h_a = ler_header_arvore(arvore);
-	h_l = ler_header_lista(lista);
-	imprime_header_arvore(h_a);
-	imprime_header_lista(h_l);
-	/*
-	fclose(arvore);
-	fclose(lista);
-	arvore = fopen("arvore", "w");
-	lista = fopen("arvore", "w");
-	
-	h_l->livre = NULL_ARQ;
-	h_l->topo = 0;
-	h_a->raiz = NULL_ARQ;
-	h_a->livre = NULL_ARQ;
-	h_a->topo = 0;
-	
-	arvore = abre_arquivo_binario("arvore");
-	lista = abre_arquivo_binario("lista");
-	*/
 	escreve_header_arvore(arvore, h_a);
 	escreve_header_lista(lista, h_l);
 
@@ -213,7 +183,7 @@ void menu_ler_arquivo()
 	if (strstr(nome_arq, ".txt") == NULL) {
         strcat(nome_arq, ".txt");
     }
-	ler_dados_do_arquivo_txt(nome_arq, arvore, lista);
+	abrir_arquivo_texto(nome_arq, arvore, lista);
 	printf("\nArquivo carregado.\n");
 	fclose(lista);
 	fclose(arvore);
@@ -221,7 +191,7 @@ void menu_ler_arquivo()
 
 int menu()
 {
-	int resposta;
+	int index;
 	printf("|  1 -> Carregar arquivo txt\n");
 	printf("|  2 -> Inserir produto\n");
 	printf("|  3 -> Atualizar preço\n");
@@ -233,6 +203,6 @@ int menu()
 	printf("|  9 -> Imprimir Livres (Corrigir)\n");
 	printf("|  0 -> Sair\n");
 
-	scanf("%d%*c", &resposta);
-	return resposta;
+	scanf("%d%*c", &index);
+	return index;
 }

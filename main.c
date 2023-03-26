@@ -1,19 +1,17 @@
 #include "interface.c"
 #include <stdio.h>
-#include <locale.h>
 
 int main()
 {
-	setlocale(LC_ALL, "Portuguese");
 	init();
 
 	while (1)
 	{
 
-		int op = menu();
+		int index = menu();
 		fflush(stdin);
 
-		switch (op)
+		switch (index)
 		{
 		case 1:
 			menu_ler_arquivo();

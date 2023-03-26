@@ -1,12 +1,16 @@
 #ifndef LISTA_H
 #define LISTA_H
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "arvore.h"
 
-struct header_lista{
+struct h_L{
 	int livre;
 	int topo;
-}typedef Header_Lista;
+}typedef Header_L;
 
 struct item{
 	int codigo;
@@ -17,131 +21,138 @@ struct item{
 	double preco;	
 }typedef Produto;
 
-//Aloca memoria para um livro
-//Entrada: Nenhuma
-//Retorno: Produto alocado
-//Pre-condicao: Nenhuma
-//Pos-condicao: Memoria para livro alocada
+/*
+ * @brief Aloca memoria para um produto
+ * @pre nenhuma
+ * @post Memoria para produto alocada
+ */
 Produto *aloca_produto();
 
-//Realiza a leitura dos dados de um livro
-//Entrada: Nenhuma
-//Retorno: Produto com os dados preenchidos
-//Pre-condicao: Nenhuma
-//Pos-condicao: Leitura de dados realizada
+/*
+ * @brief Realiza a entrada dos dados de um produto
+ * @return Produto com dados preenchidos
+ * @pre Nenhuma
+ * @post Todos os dados do produto são lidos
+ */
 Produto *ler_dados_produto();
 
-//Imprime o livro
-//Entrada: Produto que sera impresso
-//Retorno: Nenhum
-//Pre-condicao: Produto nao nulo
-//Pos-condicao: Produto impresso
-void imprime_produto(Produto *l);
+/*
+ * @brief Imprime os dados do produto
+ * @param p Produto a ser imprimido
+ * @pre Produto não nulo
+ * @post Dados do produto são imprimidos
+ */
+void imprime_produto(Produto *p);
 
-//Aloca memoria para um header de lista
-//Entrada: Nenhuma
-//Retorno: Header alocado
-//Pre-condicao: Nenhuma
-//Pos-condicao: Memoria para header alocada
-Header_Lista *alocar_header_lista();
+/*
+ * @brief Aloca memoria para um header de lista
+ * @return Header alocado
+ * @pre Nenhuma
+ * @post Header alocado na memoria
+ */
+Header_L *alocar_header_lista();
 
-//Imprime o header da lista
-//Entrada: Header que sera impresso
-//Retorno: Nenhum
-//Pre-condicao: Header nao nulo
-//Pos-condicao: Header impresso
-void imprime_header_lista(Header_Lista *h);
+/*
+ * @brief Imprime o header da lista
+ * @param h Header da lista
+ * @pre Header nao nulo
+ * @post Os dados do header são imprimidos
+ */
+void imprime_header_lista(Header_L *h);
 
-//Calcula o deslocamento necessario para chegar a uma determinada posicao na lista
-//Entrada: A posicao que deseja alcancar
-//Retorno: A quantidade de memoria necessaria para chegar a posicao
-//Pre-condicao: Nenhuma
-//Pos-condicao: Deslocamento calculado
+/*
+ * @brief Calcula o deslocamento necessario para chegar a uma posicao no arquivo binario "lista"
+ * @param pos Posição desejada
+ * @return Offset de memoria necessaria para chegar a posicao
+ * @pre Nenhuma
+ * @post Deslocamento calculado
+ */
 size_t calcula_offset_lista(int pos);
 
-//Escreve o header na lista
-//Entrada: O arquivo onde o header sera escrito, e o header que sera escrito
-//Retorno: Nenhum
-//Pre-condicao: Arquivo e header nao nulos
-//Pos-condicao: Header escrito no arquivo
-void escreve_header_lista(FILE *f, Header_Lista *h);
+/*
+ * @brief Escreve o header no arquivo binario "lista"
+ * @param f Arquivo binario "lista"
+ * @param h Header da lista
+ * @pre Arquivo e header nao são nulos
+ * @post O header é escrito no arquivo binario
+ */
+void escreve_header_lista(FILE *f, Header_L *h);
 
-//Le o header de um arquivo com a lista
-//Entrada: O arquivo em que sera realizada a leitura
-//Retorno: O header que foi lido
-//Pre-condicao: Arquivo nao nulo
-//Pos-condicao: Header lido
-Header_Lista *ler_header_lista(FILE *f);
+/*
+ * @brief Le o header de um arquivo com a lista
+ * @param f Arquivo binario "lista"
+ * @pre Arquivo não pode ser nulo
+ * @return Header com os dados do arquivo
+ * @post Header lido
+ */
+Header_L *ler_header_lista(FILE *f);
 
-//Retorna a primeira posicao livre na lista
-//Entrada: O header que contem os dados da lista
-//Retorno: A primeira posicao livre
-//Pre-condicao: Header nao nulo
-//Pos-condicao: Posicao retornada
-int retorna_posicao_livre_lista(Header_Lista *h);	
+/*
+ * @brief Retorna a primeira posicao livre na lista
+ * @param h Header do arquivo "lista"
+ * @pre Header não é nulo
+ * @return Primeira posição livre no header da lista
+ * @post posição retornada
+ */
+int retorna_posicao_livre_lista(Header_L *h);	
 
-//Escreve um livro na lista contendo os dados dos livros
-//Entrada: O arquivo onde o livro sera escrito, o livro que sera escrito e a posicao onde ele sera escrito
-//Retorno: Nenhum
-//Pre-condicao: Nenhuma
-//Pos-condicao: Produto escrito no arquivo
-void escreve_produto_na_lista(FILE *f, Produto *l, int pos);
+/*
+ * @brief Escreve um produto no arquivo da lista
+ * @param f Arquivo binario da lista
+ * @param p Produto a ser inserido
+ * @param pos Posição em que ele deve ser inserido
+ * @pre Nenhuma
+ * @post Produto escrito no arquivo
+ */
+void escreve_produto_na_lista(FILE *f, Produto *p, int pos);
 
-//Le um livro no arquivo contendo a lista com as informacoes dos livros
-//Entrada: O arquivo contendo a lista com as informacoes dos livros, e a posicao que sera lida
-//Retorno: Produto com os dados presentes na lista
-//Pre-condicao: Nenhuma
-//Pos-condicao: Produto lido da lista
+/*
+ * @brief Lê um produto no arquivo com os dados dos produtos "lista"
+ * @param f Arquivo binario da "lista"
+ * @param pos Posição do produto na lista
+ * @return Produto com as informações lidas no arquivo
+ * @pre Nenhuma
+ * @post Produto lido da lista
+ */
 Produto *ler_produto_na_lista(FILE *f, int pos);
 
-//Insere os dados de um livro no arquivo contendo a lista com as informacoes dos livros
-//Entrada: O arquivo contendo a lista com as informacoes dos livros e o livro que sera inserido
-//Retorno: A posicao onde o livro foi inserido
-//Pre-condicao: Nenhuma
-//Pos-condicao: Produto inserido no arquivo contendo a lista
-int inserir_dados_do_produto_no_arquivo(FILE *f, Produto *l);
+/*
+ * @brief Insere os dados de um produto no arquivo contendo a lista de dados dos produtos
+ * @param f Arquivo binario da lista de dados dos produtos
+ * @param p Produto a ser inserido no arquivo
+ * @return Posição onde o produto foi inserido
+ * @pre Nenhuma
+ * @post Produto inserido no arquivo contendo a lista
+ */
+int inserir_dados_do_produto_no_arquivo(FILE *f, Produto *p);
 
-//Le uma linha de um arquivo txt enquanto armazena seus dados em um livro
-//Entrada: O arquivo cuja linha sera lida
-//Retorno: Produto com os dados preenchidos
-//Pre-condicao: Nenhuma
-//Pos-condicao: Linha lida e seus dados armazenados em um livro
+/*
+ * @brief Lê as linhas de um arquivo txt e adiciona na lista de produtos e na arvore ou realiza operações de alterar e remover
+ * @param f Produto txt com as informações em lote
+ * @param arvore Arquivo binario contendo a arvore
+ * @param lista Arquivo binario contendo a lista de dados dos produtos
+ * @pre Nenhuma
+ * @post O arquivo txt inteiro é lido e as operações são realizadas
+ */
 void ler_linha_txt(FILE *f, FILE *arvore, FILE *lista);
 
-//Le os dados de um arquivo txt e insere-os nos arquivos contendo a arvore e a lista com as informacoes dos livros
-//Entrada: Nome do arquivo txt que sera lido, o arquivo contendo a arvore e o arquivo contendo a lista com as informacoes dos livros
-//Retorno: Nenhum
-//Pre-condicao: Nome do arquivo nao nulo
-//Pos-condicao: Arquivo lido
-void ler_dados_do_arquivo_txt(char *nome_arq, FILE *arvore, FILE *lista);
+/*
+ * @brief Tenta abrir o arquivo de texto
+ * @param nome_arq Nome do arquivo txt a ser aberto
+ * @param arvore Arquivo binario contendo a arvore
+ * @param lista Arquivo binario contendo a lista
+ * @pre Nome do arquivo nao nulo
+ * @post Arquivo é lido
+ */
+void abrir_arquivo_texto(char *nome_arq, FILE *arvore, FILE *lista);
 
-//Altera a posicao livre no cabecalho do arquivo que contem as informacoes dos livros
-//Entrada: O arquivo contendo a lista com as informacoes dos livros e o valor da nova posicao livre para ser alterada
-//Retorno: Nenhum
-//Pre-condicao: Nenhuma
-//Pos-condicao: Posicao livre no cabecalho alterada
+/*
+ * @brief Altera a posicao livre no cabecalho do arquivo que contem as informacoes dos produtos
+ * @param f Arquivo binario contendo a lista de dados dos produtos
+ * @param pos Posição que esta livre
+ * @pre Nenhuma
+ * @post Posicao livre do cabeçalho da lista é alterado
+ */
 void alterar_livre_na_lista(FILE *f, int pos);
-
-//Preenche um vetor com os titulos dos livros presentes na arvore
-//Entrada: O arquivo contendo a arvore, o arquivo contendo a lista com as informacoes dos livros, o vetor que sera preenchido e a raiz da arvore
-//Retorno: Nenhum
-//Pre-condicao: Arvore nao vazia
-//Pos-condicao: Vetor preenchido
-void preenche_vetor(FILE *arvore, FILE *lista, Produto vet[], int raiz);
-
-//Ordena um vetor de strings por ordem alfabetica utilizando o metodo QuickSort
-//Entrada: O vetor que sera ordenado, a primeira posicao do vetor e a ultima posicao do vetor
-//Retorno: Nenhum
-//Pre-condicao: Nenhuma
-//Pos-condicao: Vetor ordenado alfabeticamente
-void quick_sort(Produto vet[], int inicio, int fim);
-
-
-//printa o menu de sa�da do programa
-//entrada = nenhuma
-//retorno = op��o do menu escolhida pelo usuario
-//Pr�-condi��o = nenhum
-//p�s-condi��o = nenhum
-int sairPrograma();
 
 #endif

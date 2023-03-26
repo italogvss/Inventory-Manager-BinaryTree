@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "arvore.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "lista.h": "c"
     }
 }

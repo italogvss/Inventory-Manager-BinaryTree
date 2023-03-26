@@ -1,10 +1,5 @@
 #include "arvore.h"
 
-// Verifica se o arquivo existe
-// Entrada: Nome do arquivo que sera verificado
-// Retorno: Se o item existe ou nao
-// Pre-condicao: Nenhuma
-// Pos-condicao: Verificacao realizada
 int checa_se_arquivo_existe(char *nome_arq)
 {
 	FILE *f;
@@ -17,11 +12,6 @@ int checa_se_arquivo_existe(char *nome_arq)
 	return 1;
 }
 
-// Abre o arquivo binario
-// Entrada: O nome do arquivo que sera aberto
-// Retorno: O arquivo aberto
-// Pre-condicao: Nenhuma
-// Pos-condicao: Arquivo aberto
 FILE *abre_arquivo_binario(char *nome_arq)
 {
 	FILE *f = fopen(nome_arq, "rb+");
@@ -31,13 +21,13 @@ FILE *abre_arquivo_binario(char *nome_arq)
 
 		if (strcmp(nome_arq, "arvore"))
 		{
-			Header_Arvore *h_a = alocar_header_arvore();
+			Header_A *h_a = alocar_header_arvore();
 			h_a->raiz = NULL_ARQ;
 			h_a->livre = NULL_ARQ;
 			h_a->topo = 0;
 			escreve_header_arvore(f, h_a);
 		}else if(strcmp(nome_arq, "lista")){
-			Header_Lista *h_l = alocar_header_lista();
+			Header_L *h_l = alocar_header_lista();
 			h_l->livre = NULL_ARQ;
 			h_l->topo = 0;
 			escreve_header_lista(f, h_l);
@@ -50,61 +40,28 @@ FILE *abre_arquivo_binario(char *nome_arq)
 	return f;
 }
 
-// Aloca memoria para um header de arvore
-// Entrada: Nenhuma
-// Retorno: Header alocado
-// Pre-condicao: Nenhuma
-// Pos-condicao: Memoria para header alocada
-Header_Arvore *alocar_header_arvore()
+Header_A *alocar_header_arvore()
 {
-	Header_Arvore *h = malloc(sizeof(Header_Arvore));
-	memset(h, 0, sizeof(Header_Arvore));
+	Header_A *h = malloc(sizeof(Header_A));
+	memset(h, 0, sizeof(Header_A));
 	return h;
 }
 
-// Aloca memoria para um no arvore
-// Entrada: Nenhuma
-// Retorno: No arvore alocado
-// Pre-condicao: Nenhuma
-// Pos-condicao: Memoria para no arvore alocada
-No_Arvore *aloca_no_arvore()
+No_A *aloca_no_arvore()
 {
-	No_Arvore *no = malloc(sizeof(No_Arvore));
-	memset(no, 0, sizeof(No_Arvore));
+	No_A *no = malloc(sizeof(No_A));
+	memset(no, 0, sizeof(No_A));
 	return no;
 }
 
-// Realiza a leitura dos dados de um no arvore
-// Entraa: Nenhuma
-// Retorno: No arvore com os dados preenchidos
-// Pre-condicao: Nenhuma
-// Pos-condicao: Leitura de dados realizada
-No_Arvore *scaneia_no_arvore()
-{
-	No_Arvore *no = aloca_no_arvore();
-	printf("Codigo: ");
-	scanf("%d", &no->codigo);
-	return no;
-}
-
-// Imprime o header da arvore
-// Entrada: Header que sera impresso
-// Retorno: Nenhum
-// Pre-condicao: Header nao nulo
-// Pos-condicao: Header impresso
-void imprime_header_arvore(Header_Arvore *h)
+void imprime_header_arvore(Header_A *h)
 {
 	printf("Raiz: %d\n", h->raiz);
 	printf("Livre: %d\n", h->livre);
 	printf("Topo: %d\n", h->topo);
 }
 
-// Imprime o no arvore
-// Entrada: No arvore que sera impresso
-// Retorno: Nenhum
-// Pre-condicao: No arvore nao nulo
-// Pos-condicao: No arvore impresso
-void imprime_no_arvore(No_Arvore *no)
+void imprime_no_arvore(No_A *no)
 {
 	printf("%d\n", no->codigo);
 	printf("%d\n", no->esq);
@@ -112,46 +69,26 @@ void imprime_no_arvore(No_Arvore *no)
 	printf("%d\n", no->pos_dados);
 }
 
-// Calcula o deslocamento necessario para chegar a posicao determinada na arvore
-// Entrada: A posicao que deseja alcancar
-// Retorno: A quantidade de memoria necessaria para chegar a posicao
-// Pre-condicao: Nenhuma
-// Pos-condicao: Deslocamento calculado
 size_t calcula_offset_arvore(int pos)
 {
-	return sizeof(Header_Arvore) + pos * sizeof(No_Arvore);
+	return sizeof(Header_A) + pos * sizeof(No_A);
 }
 
-// Escreve o header na arvore
-// Entrada: O arquivo onde o header sera escrito, e o header que sera escrito
-// Retorno: Nenhum
-// Pre-condicao: Arquivo e header nao nulos
-// Pos-condicao: Header escrito no arquivo
-void escreve_header_arvore(FILE *f, Header_Arvore *h)
+void escreve_header_arvore(FILE *f, Header_A *h)
 {
 	fseek(f, 0, SEEK_SET);
-	fwrite(h, sizeof(Header_Arvore), 1, f);
+	fwrite(h, sizeof(Header_A), 1, f);
 }
 
-// Le o header de um arquivo com a arvore
-// Entrada: O arquivo em que sera realizada a leitura
-// Retorno: O header que foi lido
-// Pre-condicao: Arquivo nao nulo
-// Pos-condicao: Header lido
-Header_Arvore *ler_header_arvore(FILE *f)
+Header_A *ler_header_arvore(FILE *f)
 {
-	Header_Arvore *h = alocar_header_arvore();
+	Header_A *h = alocar_header_arvore();
 	fseek(f, 0, SEEK_SET);
-	fread(h, sizeof(Header_Arvore), 1, f);
+	fread(h, sizeof(Header_A), 1, f);
 	return h;
 }
 
-// Retorna a posicao primeira posicao livre na arvore
-// Entrada: O header que contem os dados da arvore
-// Retorno: A primeira posicao livre
-// Pre-condicao: Header nao nulo
-// Pos-condicao: Posicao retornada
-int retorna_posicao_livre_arvore(Header_Arvore *h)
+int retorna_posicao_livre_arvore(Header_A *h)
 {
 	if (h->livre == NULL_ARQ)
 	{
@@ -160,39 +97,24 @@ int retorna_posicao_livre_arvore(Header_Arvore *h)
 	return h->livre;
 }
 
-// Escreve um no arvore no arquivo contendo a arvore
-// Entrada: O arquivo onde o no arvore sera escrito, o no arvore que sera escrito e a posicao onde ele sera escrito
-// Retorno: Nenhum
-// Pre-condicao: Nenhuma
-// Pos-condicao: No arvore escrito no arquivo
-void escreve_dado_na_arvore(FILE *f, No_Arvore *no, int pos)
+void escreve_dado_na_arvore(FILE *f, No_A *no, int pos)
 {
 	fseek(f, calcula_offset_arvore(pos), SEEK_SET);
-	fwrite(no, sizeof(No_Arvore), 1, f);
+	fwrite(no, sizeof(No_A), 1, f);
 }
 
-// Le um no arvore no arquivo contendo a arvore
-// Entrada: O arquivo contendo a arvore, e a posicao que sera lida
-// Retorno: No arvore com os dados presentes na arvore
-// Pre-condicao: Nenhuma
-// Pos-condicao: No arvore lido da arvore
-No_Arvore *ler_dado_na_arvore(FILE *f, int pos)
+No_A *ler_dado_na_arvore(FILE *f, int pos)
 {
-	No_Arvore *no = aloca_no_arvore();
+	No_A *no = aloca_no_arvore();
 	fseek(f, calcula_offset_arvore(pos), SEEK_SET);
-	fread(no, sizeof(No_Arvore), 1, f);
+	fread(no, sizeof(No_A), 1, f);
 	return no;
 }
 
-// Procura o pai de um determinado elemento a partir de seu codigo
-// Entrada: O arquivo onde esta o elemento e o codigo do elemento
-// Retorno: A posicao do pai do elemento
-// Pre-condicao: Nenhuma
-// Pos-condicao: Pai do elemento encontrado
 int procura_no_pai_do_elemento_inserido(FILE *f, int codigo)
 {
-	Header_Arvore *h = ler_header_arvore(f);
-	No_Arvore *no = ler_dado_na_arvore(f, h->raiz);
+	Header_A *h = ler_header_arvore(f);
+	No_A *no = ler_dado_na_arvore(f, h->raiz);
 	int encontrado = 0, posicao_no = 0;
 	posicao_no = h->raiz;
 	while (!encontrado)
@@ -221,18 +143,13 @@ int procura_no_pai_do_elemento_inserido(FILE *f, int codigo)
 	return posicao_no;
 }
 
-// Insere um no arvore no arquivo contendo a arvore
-// Entrada: O arquivo onde o no arvore sera inserido, e o no arvore que sera inserido
-// Retorno: Nenhum
-// Pre-condicao: Nenhuma
-// Pos-condicao: No arvore inserido no arquivo contendo a arvore
-void inserir_no_arquivo_arvore(FILE *f, No_Arvore *no)
+void inserir_no_arquivo_arvore(FILE *f, No_A *no)
 {
 	int pos, pos_do_pai, i;
 	no->esq = NULL_ARQ;
 	no->dir = NULL_ARQ;
-	Header_Arvore *h = ler_header_arvore(f);
-	No_Arvore *no_aux; // No que vai ler o no vazio para poder atualizar a posicao vazia, e apos isso recebera o no pai do elemento inserido para atualiza-lo.
+	Header_A *h = ler_header_arvore(f);
+	No_A *no_aux; // No que vai ler o no vazio para poder atualizar a posicao vazia, e apos isso recebera o no pai do elemento inserido para atualiza-lo.
 	if (h->raiz == NULL_ARQ && h->livre == NULL_ARQ)
 	{
 		h->topo = 1;
@@ -311,57 +228,9 @@ void inserir_no_arquivo_arvore(FILE *f, No_Arvore *no)
 	}
 }
 
-// Imprime a arvore presente no arquivo contendo a arvore
-// Entrada: O arquivo que contem a arvore, a raiz da arvore e uma variavel para informar se o elemento que vai ser impresso eh a raiz
-// Retorno: Nenhum
-// Pre-condicao: Nenhuma
-// Pos-condicao: Arvore impressa
-void imprime_arvore_arquivo(FILE *f, int raiz, int i)
-{
-	No_Arvore *no = ler_dado_na_arvore(f, raiz);
-	if (no->codigo <= 0 && i == 0)
-	{
-		printf("A arvore esta vazia.\n");
-		return;
-	}
-	if (!i)
-	{
-		printf("[");
-	}
-	else
-	{
-		printf(",[");
-	}
-	printf("%d", no->codigo);
-	if (no->esq != NULL_ARQ)
-	{
-		imprime_arvore_arquivo(f, no->esq, 1);
-	}
-	if (no->esq == NULL_ARQ)
-	{
-		printf(",[]");
-	}
-	if (no->dir != NULL_ARQ)
-	{
-		imprime_arvore_arquivo(f, no->dir, 1);
-	}
-	if (no->dir == NULL_ARQ)
-	{
-		printf(",[]");
-	}
-	printf("]");
-
-	free(no);
-}
-
-// Calcula a altura da arvore presente no arquivo
-// Entrada: O arquivo que contem a arvore e a raiz da arvore
-// Retorno: A altura da arvore
-// Pre-condicao: Nenhuma
-// Pos-condicao: Altura da arvore retornada
 int calcula_altura_arvore(FILE *f, int raiz)
 {
-	No_Arvore *no = ler_dado_na_arvore(f, raiz);
+	No_A *no = ler_dado_na_arvore(f, raiz);
 	if (no->codigo > 0)
 	{
 		int tam_esq = 0, tam_dir = 0;
@@ -388,7 +257,7 @@ int calcula_altura_arvore(FILE *f, int raiz)
 // Pos-condicao: Nivel impresso
 void imprime_nivel(FILE *f, int n, int raiz)
 {
-	No_Arvore *no = ler_dado_na_arvore(f, raiz);
+	No_A *no = ler_dado_na_arvore(f, raiz);
 	if (no->codigo > 0)
 	{
 		if (n == 0)
@@ -413,7 +282,7 @@ void imprime_por_nivel()
 {
 	FILE *arvore;
 	arvore = abre_arquivo_binario("arvore");
-	Header_Arvore *h = ler_header_arvore(arvore);	
+	Header_A *h = ler_header_arvore(arvore);	
 	int n = calcula_altura_arvore(arvore, h->raiz);
 	int i;
 	if (h->raiz == NULL_ARQ)
@@ -438,7 +307,7 @@ void imprime_por_nivel()
 int retorna_posicao_no_arquivo(FILE *f, int codigo, int raiz)
 {
 	int n = -1;
-	No_Arvore *no = ler_dado_na_arvore(f, raiz);
+	No_A *no = ler_dado_na_arvore(f, raiz);
 	if (no->codigo == codigo)
 	{
 		n = raiz;
@@ -462,8 +331,8 @@ int retorna_posicao_no_arquivo(FILE *f, int codigo, int raiz)
 // Pos-condicao: Posicao do pai do elemento retornada
 int procura_no_pai_do_elemento_que_sera_removido(FILE *f, int codigo, int pos)
 {
-	Header_Arvore *h = ler_header_arvore(f);
-	No_Arvore *no_aux, *no = ler_dado_na_arvore(f, h->raiz);
+	Header_A *h = ler_header_arvore(f);
+	No_A *no_aux, *no = ler_dado_na_arvore(f, h->raiz);
 	if (codigo == no->codigo)
 	{
 		free(no);
@@ -503,8 +372,8 @@ int procura_no_pai_do_elemento_que_sera_removido(FILE *f, int codigo, int pos)
 // Pos-condicao: Posicao do elemento retornada
 int retorna_posicao_maximo(FILE *f, int raiz)
 {
-	No_Arvore *no = ler_dado_na_arvore(f, raiz);
-	Header_Arvore *h = ler_header_arvore(f);
+	No_A *no = ler_dado_na_arvore(f, raiz);
+	Header_A *h = ler_header_arvore(f);
 	int i = h->raiz;
 	while (no->dir != NULL_ARQ)
 	{
@@ -522,8 +391,8 @@ int retorna_posicao_maximo(FILE *f, int raiz)
 // Pos-condicao: Posicao do elemento retornada
 int retorna_posicao_minimo(FILE *f, int raiz)
 {
-	No_Arvore *no = ler_dado_na_arvore(f, raiz);
-	Header_Arvore *h = ler_header_arvore(f);
+	No_A *no = ler_dado_na_arvore(f, raiz);
+	Header_A *h = ler_header_arvore(f);
 	int i = h->raiz;
 	while (no->esq != NULL_ARQ)
 	{
@@ -541,13 +410,13 @@ int retorna_posicao_minimo(FILE *f, int raiz)
 // Pos-condicao: Elemento removido
 void remove_no_arquivo_arvore(FILE *f, FILE *lista, int codigo)
 {
-	Header_Arvore *h = ler_header_arvore(f);
+	Header_A *h = ler_header_arvore(f);
 	int i, j, sub, pai_original;
-	No_Arvore *no = ler_dado_na_arvore(f, h->raiz);
-	No_Arvore *no_aux = aloca_no_arvore();
-	No_Arvore *no_para_substituir;
-	No_Arvore *no_pai;
-	No_Arvore *no_pai_original;
+	No_A *no = ler_dado_na_arvore(f, h->raiz);
+	No_A *no_aux = aloca_no_arvore();
+	No_A *no_para_substituir;
+	No_A *no_pai;
+	No_A *no_pai_original;
 	no_aux->codigo = -1;
 	no_aux->esq = h->livre;
 	no_aux->dir = -1;
@@ -700,7 +569,7 @@ void remove_no_arquivo_arvore(FILE *f, FILE *lista, int codigo)
 			return;
 		}
 		if (no->esq == NULL_ARQ && no->dir != NULL_ARQ)
-		{ // ALGO ERRADO CHECA AI.
+		{
 			i = retorna_posicao_no_arquivo(f, no->codigo, h->raiz);
 			alterar_livre_na_lista(lista, i);
 			pai_original = procura_no_pai_do_elemento_que_sera_removido(f, no->codigo, i);
@@ -752,12 +621,12 @@ void remove_no_arquivo_arvore(FILE *f, FILE *lista, int codigo)
 int checa_se_codigo_ja_esta_na_arvore(FILE *f, int codigo)
 {
 	int i = 0, parada = 0;
-	Header_Arvore *h = ler_header_arvore(f);
+	Header_A *h = ler_header_arvore(f);
 	if (h->raiz == NULL_ARQ)
 	{
 		return 0;
 	}
-	No_Arvore *no = ler_dado_na_arvore(f, h->raiz);
+	No_A *no = ler_dado_na_arvore(f, h->raiz);
 	if (no->codigo == codigo)
 	{
 		i = 1;
@@ -796,9 +665,9 @@ int checa_se_codigo_ja_esta_na_arvore(FILE *f, int codigo)
 // Pos-condicao: Numero de exemplares do item alterado
 void altera_preco(FILE *arvore, FILE *lista, int codigo)
 {
-	Header_Arvore *h = ler_header_arvore(arvore);
+	Header_A *h = ler_header_arvore(arvore);
 	int i = retorna_posicao_no_arquivo(arvore, codigo, h->raiz);
-	No_Arvore *no = ler_dado_na_arvore(arvore, i);
+	No_A *no = ler_dado_na_arvore(arvore, i);
 	Produto *p = ler_produto_na_lista(lista, no->pos_dados);
 	printf("Entre com o preço.\n");
 	scanf("%lf", &p->preco);
@@ -810,9 +679,9 @@ void altera_preco(FILE *arvore, FILE *lista, int codigo)
 
 void altera_estoque(FILE *arvore, FILE *lista, int codigo)
 {
-	Header_Arvore *h = ler_header_arvore(arvore);
+	Header_A *h = ler_header_arvore(arvore);
 	int i = retorna_posicao_no_arquivo(arvore, codigo, h->raiz);
-	No_Arvore *no = ler_dado_na_arvore(arvore, i);
+	No_A *no = ler_dado_na_arvore(arvore, i);
 	Produto *p = ler_produto_na_lista(lista, no->pos_dados);
 	printf("Entre com o estoque.\n");
 	scanf("%d", &p->estoque);
@@ -830,9 +699,9 @@ void altera_estoque(FILE *arvore, FILE *lista, int codigo)
 // Pos-condicao: Dados do item desejado impressos
 void busca_dados_do_produto(FILE *arvore, FILE *lista, int codigo)
 {
-	Header_Arvore *h = ler_header_arvore(arvore);
+	Header_A *h = ler_header_arvore(arvore);
 	int i = retorna_posicao_no_arquivo(arvore, codigo, h->raiz);
-	No_Arvore *no = ler_dado_na_arvore(arvore, i);
+	No_A *no = ler_dado_na_arvore(arvore, i);
 	Produto *p = ler_produto_na_lista(lista, no->pos_dados);
 	imprime_produto(p);
 	free(h);
@@ -847,8 +716,8 @@ void busca_dados_do_produto(FILE *arvore, FILE *lista, int codigo)
 // Pos-condicao: Dados impressos
 void imprime_todos_produto(FILE *arvore, FILE *lista, int raiz)
 {
-	No_Arvore *no = ler_dado_na_arvore(arvore, raiz);
-	Header_Arvore *h = ler_header_arvore(arvore);
+	No_A *no = ler_dado_na_arvore(arvore, raiz);
+	Header_A *h = ler_header_arvore(arvore);
 	Produto *p;
 	int i;
 	if (no->esq != NULL_ARQ)
