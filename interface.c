@@ -2,7 +2,28 @@
 #include "lista.c"
 #include <stdio.h>
 #include <locale.h>
+void init()
+{
 
+	FILE *arvore, *lista;
+	Header_Arvore *h_a = alocar_header_arvore();
+	Header_Lista *h_l = alocar_header_lista();
+	lista = abre_arquivo_binario("lista");
+	arvore = abre_arquivo_binario("arvore");
+
+	h_a->raiz = NULL_ARQ;
+	h_a->livre = NULL_ARQ;
+	h_a->topo = 0;
+	escreve_header_arvore(arvore, h_a);
+
+	h_l->livre = NULL_ARQ;
+	h_l->topo = 0;
+	escreve_header_lista(lista, h_l);
+	h_a = ler_header_arvore(arvore);
+	h_l = ler_header_lista(lista);
+	imprime_header_arvore(h_a);
+	imprime_header_lista(h_l);
+}
 void menu_inserir()
 {
 	FILE *arvore, *lista;
@@ -141,77 +162,79 @@ void menu_imprimir()
 	fclose(arvore);
 }
 
-void menu_ler_arquivo(){
+void menu_ler_arquivo()
+{
 	FILE *arvore, *lista;
 	lista = abre_arquivo_binario("lista");
 	arvore = abre_arquivo_binario("arvore");
 	Header_Arvore *h_a = ler_header_arvore(arvore);
 	Header_Lista *h_l = ler_header_lista(lista);
 	char nome_arq[100];
-			h_a = ler_header_arvore(arvore);
-			h_l = ler_header_lista(lista);
-			imprime_header_arvore(h_a);
-			imprime_header_lista(h_l);
-			/*
-			fclose(arvore);
-			fclose(lista);
-			arvore = fopen("arvore", "w");
-			lista = fopen("arvore", "w");
-			*/
-			h_l->livre = NULL_ARQ;
-			h_l->topo = 0;
-			h_a->raiz = NULL_ARQ;
-			h_a->livre = NULL_ARQ;
-			h_a->topo = 0;
-			/*
-			arvore = abre_arquivo_binario("arvore");
-			lista = abre_arquivo_binario("lista");
-			*/
-			escreve_header_arvore(arvore, h_a);
-			escreve_header_lista(lista, h_l);
-			
-			fflush(stdin);
-			printf("Entre com o nome do arquivo txt com os dados que deseja inserir.\n");
-			scanf("%[^\n]%*c", nome_arq);
-			ler_dados_do_arquivo_txt(nome_arq, arvore, lista);
-			printf("Arquivo carregado.\n");
-			printf("final leitura");
-			h_a = ler_header_arvore(arvore);
-			h_l = ler_header_lista(lista);
-			imprime_header_arvore(h_a);
-			imprime_header_lista(h_l);
+	h_a = ler_header_arvore(arvore);
+	h_l = ler_header_lista(lista);
+	imprime_header_arvore(h_a);
+	imprime_header_lista(h_l);
+	/*
+	fclose(arvore);
+	fclose(lista);
+	arvore = fopen("arvore", "w");
+	lista = fopen("arvore", "w");
+	*/
+	h_l->livre = NULL_ARQ;
+	h_l->topo = 0;
+	h_a->raiz = NULL_ARQ;
+	h_a->livre = NULL_ARQ;
+	h_a->topo = 0;
+	/*
+	arvore = abre_arquivo_binario("arvore");
+	lista = abre_arquivo_binario("lista");
+	*/
+	escreve_header_arvore(arvore, h_a);
+	escreve_header_lista(lista, h_l);
+
+	fflush(stdin);
+	printf("Entre com o nome do arquivo txt com os dados que deseja inserir.\n");
+	scanf("%[^\n]%*c", nome_arq);
+	ler_dados_do_arquivo_txt(nome_arq, arvore, lista);
+	printf("Arquivo carregado.\n");
+	printf("final leitura");
+	h_a = ler_header_arvore(arvore);
+	h_l = ler_header_lista(lista);
+	imprime_header_arvore(h_a);
+	imprime_header_lista(h_l);
 	fclose(lista);
 	fclose(arvore);
 }
 
-int menuInicial(){
+int menuInicial()
+{
 	int resposta;
-	
 
-	printf("|   (1) Carregar arquivo\n");                           	
-	printf("|   (2) Inserir item\n");                   
+	printf("|   (1) Carregar arquivo\n");
+	printf("|   (2) Inserir item\n");
 	printf("|   (3) Atualizar preço\n");
 	printf("|   (4) Atualizar estoque\n");
-	printf("|   (5) Remover produto\n");                   
-	printf("|   (6) Buscar dados do produto \n");            
-	printf("|   (7) Imprimir arvore binaria por nivel\n");    
-	printf("|   (8) Imprimir tudo\n");    
-	printf("|   (9) (Experimental)Abrir Arquivo\n");    
+	printf("|   (5) Remover produto\n");
+	printf("|   (6) Buscar dados do produto \n");
+	printf("|   (7) Imprimir arvore binaria por nivel\n");
+	printf("|   (8) Imprimir tudo\n");
+	printf("|   (9) (Experimental)Abrir Arquivo\n");
 
 	scanf("%d%*c", &resposta);
 	return resposta;
 }
 
-int sairPrograma(){
+int sairPrograma()
+{
 	int opcao;
-	
-	system ("cls");
+
+	system("cls");
 	printf("\x1B[1;31m");
-	printf("=====================================\n");		
+	printf("=====================================\n");
 	printf("|                                   |\n");
-	printf("|            Site                   |\n");	
+	printf("|            Site                   |\n");
 	printf("|                                   |\n");
-	printf("=====================================\n");	
+	printf("=====================================\n");
 	printf("|                                   |\n");
 	printf("|      Deseja sair do programa?     |\n");
 	printf("|         (1) SIM   (2)NAO          |\n");
@@ -219,6 +242,6 @@ int sairPrograma(){
 	printf("=====================================\n");
 	printf("\x1B[0;0m");
 	scanf("%d", &opcao);
-	
+
 	return opcao;
 }

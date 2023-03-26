@@ -5,17 +5,7 @@
 int main()
 {
 	setlocale(LC_ALL, "Portuguese");
-	FILE *arvore, *lista;
-	Header_Arvore *h_a = alocar_header_arvore();
-	Header_Lista *h_l = alocar_header_lista();
-	lista = abre_arquivo_binario("lista");
-	arvore = abre_arquivo_binario("arvore");
-	system("cls");
-	printf("inicio programa \n");
-	h_a = ler_header_arvore(arvore);
-	h_l = ler_header_lista(lista);
-	imprime_header_arvore(h_a);
-	imprime_header_lista(h_l);
+	init();
 
 	while (1)
 	{

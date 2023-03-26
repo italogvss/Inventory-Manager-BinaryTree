@@ -211,33 +211,33 @@ void ler_linha_txt(FILE *f, FILE *arvore, FILE *lista)
 	char op[2];
 
 	fscanf(f, " %[^;];", op); // Operação
-	printf("\n \n %s \n \n", op); 
-	if(strcmp(op, "I")){
+	printf("\n \n %s \n \n", op);
+	if (strcmp(op, "I"))
+	{
 
-	fscanf(f, " %[^;];", str); // Código do item
+		fscanf(f, " %[^;];", str); // Código do item
 
-	p->codigo = atoi(str);
+		p->codigo = atoi(str);
 
-	fscanf(f, " %[^;];", str); // Nome do item
+		fscanf(f, " %[^;];", str); // Nome do item
 
-	strcpy(p->nome, str);
+		strcpy(p->nome, str);
 
-	fscanf(f, " %[^;];", str); // marca do item
+		fscanf(f, " %[^;];", str); // marca do item
 
-	strcpy(p->marca, str);
+		strcpy(p->marca, str);
 
-	fscanf(f, " %[^;];", str); // categoria do item
+		fscanf(f, " %[^;];", str); // categoria do item
 
-	strcpy(p->categoria, str);
+		strcpy(p->categoria, str);
 
-	fscanf(f, " %[^;]; ", str); // Numero estoque
+		fscanf(f, " %[^;]; ", str); // Numero estoque
 
-	p->estoque = atoi(str);
+		p->estoque = atoi(str);
 
-	fscanf(f, " %[^\n] ", str);
+		fscanf(f, " %[^\n] ", str);
 
-
-	if (checa_se_codigo_ja_esta_na_arvore(arvore, p->codigo))
+		if (checa_se_codigo_ja_esta_na_arvore(arvore, p->codigo))
 		{
 			printf("Produto ja esta cadastrado.\n");
 		}
@@ -249,55 +249,88 @@ void ler_linha_txt(FILE *f, FILE *arvore, FILE *lista)
 			no->pos_dados = i;
 			inserir_no_arquivo_arvore(arvore, no);
 		}
-
-	}else if(strcmp(op, "A")){
-
-	}else if(strcmp(op, "R")){
-
+	}
+	else if (strcmp(op, "A"))
+	{
+	}
+	else if (strcmp(op, "R"))
+	{
 	}
 }
 
-void lerlinha(FILE *f, FILE *arvore, FILE *lista){
+void lerlinha(FILE *f, FILE *arvore, FILE *lista)
+{
 	No_Arvore *no = aloca_no_arvore();
-    Produto *p = aloca_produto();
-    char linha[150];
-    char *token;
+	Produto *p = aloca_produto();
+	char linha[150];
+	char *token;
 
-     while (fgets(linha, sizeof(linha), f)) {
+	while (fgets(linha, sizeof(linha), f))
+	{
 
-        // remove o caractere de quebra de linha do final da string
-        linha[strcspn(linha, "\n")] = 0;
+		// remove o caractere de quebra de linha do final da string
+		linha[strcspn(linha, "\n")] = 0;
 
-        // separa a linha em campos usando o separador ";"
-        token = strtok(linha, ";");
-        if (strcmp(token, "I") == 0) {
-            // operação de inserção
-            p->codigo = atoi(strtok(NULL, ";"));
-            strcpy(p->nome, strtok(NULL, ";"));
-            strcpy(p->marca, strtok(NULL, ";"));
-            strcpy(p->categoria, strtok(NULL, ";"));
-            p->estoque = atoi(strtok(NULL, ";"));
-            p->preco = atof(strtok(NULL, ";"));
-
-           if (checa_se_codigo_ja_esta_na_arvore(arvore, p->codigo))
+		// separa a linha em campos usando o separador ";"
+		token = strtok(linha, ";");
+		if (strcmp(token, "I") == 0)
 		{
-			printf("Produto ja esta cadastrado.\n");
+			// operação de inserção
+			p->codigo = atoi(strtok(NULL, ";"));
+			strcpy(p->nome, strtok(NULL, ";"));
+			strcpy(p->marca, strtok(NULL, ";"));
+			strcpy(p->categoria, strtok(NULL, ";"));
+			p->estoque = atoi(strtok(NULL, ";"));
+			p->preco = atof(strtok(NULL, ";"));
+
+			if (checa_se_codigo_ja_esta_na_arvore(arvore, p->codigo))
+			{
+				printf("Produto ja esta cadastrado.\n");
+			}
+			else
+			{
+				imprime_produto(p);
+				int i = inserir_dados_do_produto_no_arquivo(lista, p);
+				no->codigo = p->codigo;
+				no->pos_dados = i;
+				inserir_no_arquivo_arvore(arvore, no);
+			}
+		}
+		else if (strcmp(token, "R") == 0)
+		{
+			remove_no_arquivo_arvore(arvore, lista, atoi(strtok(NULL, ";")));
+		}
+		else if (strcmp(token, "A") == 0)
+		{
+
+			int cod = atoi(strtok(NULL, ";"));
+
+			Header_Arvore *h = ler_header_arvore(arvore);
+			int i = retorna_posicao_no_arquivo(arvore, cod, h->raiz);
+			No_Arvore *no = ler_dado_na_arvore(arvore, i);
+			Produto *p = ler_produto_na_lista(lista, no->pos_dados);
+
+			int estoque = 0, preco = 0;
+
+			token = strtok(NULL, ";");
+			if (token != NULL && strlen(token) > 0)
+			{
+				p->estoque = atoi(token);
+			}
+			token = strtok(NULL, ";");
+			if (token != NULL && strlen(token) > 0)
+			{
+				p->preco = atof(token);
+			}
+
+			escreve_produto_na_lista(lista, p, no->pos_dados);
 		}
 		else
 		{
-			imprime_produto(p);
-			int i = inserir_dados_do_produto_no_arquivo(lista, p);
-			no->codigo = p->codigo;
-			no->pos_dados = i;
-			inserir_no_arquivo_arvore(arvore, no);
+			// operação desconhecida
+			printf("Operação desconhecida: %s\n", token);
 		}
-
-        }
-        else {
-            // operação desconhecida
-            printf("Operação desconhecida: %s\n", token);
-        }
-    }
+	}
 }
 
 // Le os dados de um arquivo txt e insere-os nos arquivos contendo a arvore e a lista com as informacoes dos livros
@@ -318,14 +351,11 @@ void ler_dados_do_arquivo_txt(char *nome_arq, FILE *arvore, FILE *lista)
 	}
 	while (!feof(f))
 	{
-		//ler_linha_txt(f, arvore, lista);	
-		lerlinha(f, arvore, lista);	
+		// ler_linha_txt(f, arvore, lista);
+		lerlinha(f, arvore, lista);
 	}
 
 	free(p);
 	free(no);
 	fclose(f);
 }
-
-
-
